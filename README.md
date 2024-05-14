@@ -1,61 +1,124 @@
-## Projeto Login Screen
+# Login Screen
 
-Este projeto consiste em uma aplicação web para autenticação de usuários e gerenciamento de contas. Ele inclui funcionalidades para criar novas contas de usuário, fazer login, atualizar a senha e exibir uma página de boas-vindas após o login bem-sucedido.
+Este projeto consiste em uma aplicação web de tela de login, onde os usuários podem criar contas, fazer login, atualizar suas senhas e visualizar uma página de boas-vindas após o login bem-sucedido. Abaixo estão descritas as principais classes e funcionalidades do projeto:
 
-## Estrutura do Projeto
+
 ```
-main
-├── java
-│   └── com
-│       └── loginscreen
-│           ├── dao
-│           │   ├── UsuarioDaoImpl.java
-│           │   └── Dao.java
-│           ├── main
-│           │   └── ConnectionFactory.java
-│           ├── models
-│           │   └── Usuario.java
-│           ├── resources
-│           │   └── dbconnection.properties
-│           └── servlets
-│               ├── AtualizarSenhaServlet.java
-│               ├── CriarUsuarioServlet.java
-│               └── ValidarLoginServlet.java
-└── webapp
-    ├── META-INF
-    │   └── MANIFEST.MF
-    └── WEB-INF
-        ├── jsps
-        │   ├── index.jsp
-        │   ├── criarUsuario.jsp
-        |   ├── atualizarSenha.jsp
-        │   └── boasVindas.jsp
-        ├── lib
-        │   ├── jakarta.servlet.jsp.jstl-3.0.0.jar
-        │   ├── jakarta.servlet.jsp.jstl-api-3.0.0.jar
-        │   └── mysql-connector-j-8.3.0.jar
-        └── web.xml
+target
+├── classes
+│   ├── com
+│   │   └── loginscreen
+│   │       ├── dao
+│   │       │   ├── implementations
+│   │       │   │   ├── UsuarioDaoImpl.class
+│   │       │   │   └── UsuarioDaoJpaImpl.class
+│   │       │   └── interfaces
+│   │       │       ├── Dao.class
+│   │       │       └── UsuarioDao.class
+│   │       ├── models
+│   │       │   └── Usuario.class
+│   │       ├── resources
+│   │       │   └── dbconnection.properties
+│   │       ├── servlets
+│   │       │   ├── AtualizarSenhaServlet.class
+│   │       │   ├── CriarUsuarioServlet.class
+│   │       │   ├── DisplayHomeServlet.class
+│   │       │   ├── DisplayMenuServlet.class
+│   │       │   ├── ServletController.class
+│   │       │   └── ValidarLoginServlet.class
+│   │       └── utils
+│   │           ├── ConnectionFactory.class
+│   │           ├── JpaUtils.class
+│   │           └── ServletAction.class
+│   └── META-INF
+│       └── persistence.xml
+└── m2e-wtp
+    └── web-resources
+        ├── META-INF
+        │   ├── maven
+        │   │   └── com.login-screen
+        │   │       └── login-screen
+        │   │           ├── pom.properties
+        │   │           └── pom.xml
+        │   └── MANIFEST.MF
+        └── WEB-INF
+            ├── jsps
+            │   ├── atualizarSenha.jsp
+            │   ├── boasVindas.jsp
+            │   ├── criarUsuario.jsp
+            │   └── index.jsp
+            └── web.xml
+
 ```
 
-### Arquivos .java
+### DAO (Data Access Object)
 
-- **UsuarioDaoImpl.java**: Implementa a interface `Dao` para operações relacionadas à entidade `Usuario` no banco de dados. Inclui métodos para inserir, buscar, listar, atualizar e excluir usuários.
-- **ConnectionFactory.java**: Fornece métodos para obter uma conexão com o banco de dados MySQL, utilizando as configurações definidas no arquivo `dbconnection.properties`.
-- **Usuario.java**: Define a estrutura da classe `Usuario`, que representa um usuário na aplicação.
+#### Pacote `com.loginscreen.dao.implementations`
 
-### Arquivos .jsp
+- **UsuarioDaoImpl.java**: Implementa a interface `UsuarioDao` para realizar operações CRUD na entidade `Usuario` usando JDBC (Java Database Connectivity).
 
-- **index.jsp**: Página de login onde os usuários podem inserir seu email e senha para acessar a aplicação. Também inclui links para criar uma nova conta e para redefinir a senha.
-- **criarUsuario.jsp**: Formulário para criar uma nova conta de usuário, solicitando email e senha.
-- **atualizarSenha.jsp**: Formulário para atualizar a senha de um usuário existente, solicitando o email, a nova senha e a confirmação da nova senha.
-- **boasVindas.jsp**: Página exibida após um login bem-sucedido, dando as boas-vindas ao usuário logado.
+- **UsuarioDaoJpaImpl.java**: Implementa a interface `UsuarioDao` para realizar operações CRUD na entidade `Usuario` usando JPA (Java Persistence API).
+
+#### Pacote `com.loginscreen.dao.interfaces`
+
+- **Dao.java**: Interface genérica para operações de acesso a dados, como inserção, consulta, atualização e exclusão.
+
+- **UsuarioDao.java**: Interface que define métodos para operações CRUD na entidade `Usuario`.
+
+### Models
+
+#### Pacote `com.loginscreen.models`
+
+- **Usuario.java**: Representa um usuário com atributos como email e senha.
 
 ### Servlets
 
-- **ValidarLogin.java**: Servlet responsável por validar o login do usuário. Ele recebe as credenciais (email e senha) do formulário de login e verifica se correspondem a um usuário existente no banco de dados.
-- **CriarUsuarioServlet.java**: Servlet responsável por criar um novo usuário. Ele recebe os dados do formulário de criação de conta e adiciona um novo usuário ao banco de dados.
-- **AtualizarSenhaServlet.java**: Servlet responsável por atualizar a senha do usuário. Ele recebe o email e a nova senha do formulário de atualização de senha e atualiza a senha correspondente no banco de dados.
+#### Pacote `com.loginscreen.servlets`
 
-### Arquivo web.xml
+- **AtualizarSenhaServlet.java**: Servlet que permite ao usuário atualizar sua senha.
+- **CriarUsuarioServlet.java**: Servlet que permite ao usuário criar uma nova conta.
+- **DisplayHomeServlet.java**: Servlet que exibe uma página de boas-vindas após o login bem-sucedido.
+- **DisplayMenuServlet.java**: Servlet que exibe o menu principal da aplicação.
+- **ServletController.java**: Servlet controladora que despacha solicitações para outras servlets.
 
-- **web.xml**: Arquivo de configuração do Servlet, que mapeia os URLs dos servlets definidos no projeto.
+### Utils
+
+#### Pacote `com.loginscreen.utils`
+
+- **ConnectionFactory.java**: Responsável por fornecer uma conexão com o banco de dados MySQL usando JDBC.
+- **JpaUtils.java**: Responsável por fornecer o objeto `EntityManager` do JPA.
+- **ServletAction.java**: Define uma interface que possui métodos para execução de ações nos servlets da aplicação.
+
+### Arquivos de Configuração
+
+- **persistence.xml**: Arquivo de configuração do JPA que define as propriedades de persistência.
+- **web.xml**: Arquivo de configuração do web-app, define configurações como welcome-file e mapeamento de servlets.
+- **pom.xml**: Arquivo de configuração do Maven que define as dependências e configurações do projeto.
+- **dbconnection.properties**: Arquivo de propriedades que contém informações de configuração para a conexão com o banco de dados.
+
+## Configuração do Banco de Dados
+
+Certifique-se de configurar corretamente o banco de dados MySQL com as seguintes informações:
+
+- URL: jdbc:mysql://localhost:3306/fj21?useSSL=false&allowPublicKeyRetrieval=true
+- Usuário: root
+- Senha: root
+
+## Dependências
+
+O projeto foi construído usando Maven com as seguintes dependências:
+
+- Hibernate Core: Version 6.5.0.Final
+- Jakarta Servlet JSP JSTL API: Version 3.0.0
+- Jakarta Servlet JSP JSTL: Version 3.0.0
+- MySQL Connector/J: Version 8.0.33
+
+## Tecnologias Utilizadas
+
+- Java
+- JSP (JavaServer Pages)
+- JSTL (Java Standard Tag Library)
+- Servlets
+- MySQL
+- JPA (Java Persistence API)
+- Hibernate
